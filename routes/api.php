@@ -1,7 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
 
-Route::apiResource('categories', CategoryController::class);
+Route::post('register', 'App\Http\Controllers\AuthController@register');
+Route::post('login', 'App\Http\Controllers\AuthController@login');
+
+Route::middleware('auth:sanctum')->group(function(){
+Route::apiResource('categories', 'App\Http\Controllers\CategoryController')->except(['destroy']);
+Route::delete('categories/{category}', 'App\Http\Controllers\CategoryController@destroy')->middleware('role:admin');
+});
